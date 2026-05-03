@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>San Andreas First Responders — Recrutement</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a1628;
+    --blue: #0d3b6e;
+    --accent: #1e88e5;
+    --cyan: #00e5ff;
+    --red: #e53935;
+    --white: #f0f4ff;
+    --gray: #8a9bbf;
+    --card: #0f1f3d;
+    --border: rgba(0,229,255,0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    height: 100%;
+    overflow: auto;
+  }
+
+  body {
+    background: var(--navy);
+    color: var(--white);
+    font-family: 'Barlow', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 20px;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(30,136,229,0.18) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 40% at 20% 80%, rgba(229,57,53,0.1) 0%, transparent 60%),
+      linear-gradient(180deg, #0a1628 0%, #0d1f3c 100%);
+    z-index: 0;
+  }
+
+  /* Grid scanlines */
+  .hero-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  /* Rotating radar ring */
+  .radar-ring {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,229,255,0.08);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: ringPulse 4s ease-in-out infinite;
+  }
+  .radar-ring:nth-child(2) { width: 400px; height: 400px; animation-delay: 1s; }
+  .radar-ring:nth-child(3) { width: 800px; height: 800px; animation-delay: 2s; }
+
+  @keyframes ringPulse {
+    0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 0.08; transform: translate(-50%, -50%) scale(1.05); }
+  }
+
+  .hero-content { position: relative; z-index: 1; max-width: 900px; }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(229,57,53,0.15);
+    border: 1px solid rgba(229,57,53,0.4);
+    color: #ff6b6b;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    padding: 6px 18px;
+    border-radius: 2px;
+    margin-bottom: 30px;
+    animation: fadeDown 0.8s ease both;
+  }
+
+  .hero-badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: #e53935;
+    border-radius: 50%;
+    animation: blink 1.2s ease-in-out infinite;
+  }
+
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+  .hero-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: clamp(48px, 8vw, 96px);
+    font-weight: 700;
+    line-height: 0.95;
+    letter-spacing: -1px;
+    margin-bottom: 12px;
+    animation: fadeDown 0.8s 0.1s ease both;
+  }
+
+  .hero-title .safr { color: var(--cyan); display: block; }
+  .hero-title .full { color: var(--white); font-size: 0.45em; font-weight: 400; letter-spacing: 6px; display: block; margin-top: 8px; }
+
+  .hero-divider {
+    width: 80px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    margin: 24px auto;
+    animation: fadeDown 0.8s 0.2s ease both;
+  }
+
+  .hero-sub {
+    font-size: 16px;
+    color: var(--gray);
+    line-height: 1.7;
+    max-width: 560px;
+    margin: 0 auto 48px;
+    font-weight: 300;
+    animation: fadeDown 0.8s 0.3s ease both;
+  }
+
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--red);
+    color: white;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 16px 40px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+    transition: all 0.2s;
+    animation: fadeDown 0.8s 0.4s ease both;
+  }
+  .hero-cta:hover { background: #ff5252; transform: translateY(-2px); }
+
+  .hero-stats {
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+    margin-top: 64px;
+    flex-wrap: wrap;
+    animation: fadeDown 0.8s 0.5s ease both;
+  }
+
+  .stat {
+    text-align: center;
+    position: relative;
+  }
+  .stat::after {
+    content: '';
+    position: absolute;
+    right: -20px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 40px;
+    width: 1px;
+    background: var(--border);
+  }
+  .stat:last-child::after { display: none; }
+
+  .stat-num {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 42px;
+    font-weight: 700;
+    color: var(--cyan);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray);
+    margin-top: 4px;
+  }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── SECTIONS ── */
+  section { padding: 80px 20px; }
+
+  .container { max-width: 1100px; margin: 0 auto; }
+
+  .section-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--cyan);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 700;
+    line-height: 1.05;
+    margin-bottom: 16px;
+  }
+
+  .section-title span { color: var(--cyan); }
+
+  .section-desc {
+    color: var(--gray);
+    font-size: 16px;
+    line-height: 1.8;
+    max-width: 600px;
+    font-weight: 300;
+    margin-bottom: 48px;
+  }
+
+  /* ── À PROPOS ── */
+  .about { background: #0b1a2f; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+
+  @media(max-width: 768px) { .about-grid { grid-template-columns: 1fr; } }
+
+  .about-text p {
+    color: var(--gray);
+    font-size: 15px;
+    line-height: 1.9;
+    margin-bottom: 16px;
+    font-weight: 300;
+  }
+
+  .about-text p strong { color: var(--white); font-weight: 600; }
+
+  .about-cards { display: flex; flex-direction: column; gap: 16px; }
+
+  .about-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--cyan);
+    padding: 20px 24px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .about-card:hover { border-left-color: var(--red); transform: translateX(4px); }
+
+  .card-icon {
+    font-size: 28px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .card-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+
+  .card-body { color: var(--gray); font-size: 13px; line-height: 1.6; }
+
+  /* ── GRADES ── */
+  .grades-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-top: 40px;
+  }
+
+  .grade-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 28px 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .grade-card:hover { transform: translateY(-4px); border-color: rgba(0,229,255,0.4); }
+
+  .grade-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .grade-card.tier1::before { background: #8B8B8B; }
+  .grade-card.tier2::before { background: #4FC3F7; }
+  .grade-card.tier3::before { background: #66BB6A; }
+  .grade-card.tier4::before { background: var(--red); }
+  .grade-card.tier5::before { background: linear-gradient(90deg, #FFD700, #FFA000); }
+
+  .grade-icon { font-size: 36px; margin-bottom: 12px; }
+  .grade-name {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 6px;
+  }
+  .grade-desc { font-size: 12px; color: var(--gray); line-height: 1.5; }
+
+  /* ── RECRUTEMENT ── */
+  .recruit { background: #0b1a2f; border-top: 1px solid var(--border); }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0;
+    margin-top: 40px;
+    position: relative;
+  }
+
+  .step {
+    padding: 32px 24px;
+    border: 1px solid var(--border);
+    border-right: none;
+    position: relative;
+  }
+  .step:last-child { border-right: 1px solid var(--border); }
+
+  .step-num {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 48px;
+    color: rgba(0,229,255,0.1);
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+
+  .step-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--cyan);
+    margin-bottom: 8px;
+  }
+
+  .step-body { font-size: 13px; color: var(--gray); line-height: 1.7; }
+
+  /* ── CONDITIONS ── */
+  .conditions-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-top: 40px;
+  }
+  @media(max-width: 700px) { .conditions-grid { grid-template-columns: 1fr; } }
+
+  .cond-block {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 28px;
+  }
+
+  .cond-block-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .cond-block-title.green { color: #66BB6A; }
+  .cond-block-title.red { color: #ef5350; }
+
+  .cond-list { list-style: none; }
+  .cond-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--gray);
+    padding: 7px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    line-height: 1.5;
+  }
+  .cond-list li:last-child { border-bottom: none; }
+  .cond-list li .icon { flex-shrink: 0; margin-top: 1px; }
+
+  /* ── FORMULAIRE ── */
+  .form-wrap {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 48px;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  @media(max-width:600px) { .form-wrap { padding: 24px; } }
+
+  .form-row { margin-bottom: 24px; }
+
+  .form-label {
+    display: block;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--cyan);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .form-input, .form-select, .form-textarea {
+    width: 100%;
+    background: rgba(10,22,40,0.8);
+    border: 1px solid rgba(0,229,255,0.2);
+    color: var(--white);
+    font-family: 'Barlow', sans-serif;
+    font-size: 14px;
+    padding: 12px 16px;
+    outline: none;
+    transition: border-color 0.2s;
+    border-radius: 0;
+    -webkit-appearance: none;
+  }
+  .form-input:focus, .form-select:focus, .form-textarea:focus {
+    border-color: var(--cyan);
+    box-shadow: 0 0 0 2px rgba(0,229,255,0.08);
+  }
+  .form-select option { background: #0d1f3c; }
+  .form-textarea { resize: vertical; min-height: 120px; }
+
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media(max-width:600px) { .form-grid { grid-template-columns: 1fr; } }
+
+  .form-submit {
+    width: 100%;
+    background: var(--red);
+    color: white;
+    border: none;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 18px;
+    cursor: pointer;
+    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+    transition: background 0.2s, transform 0.1s;
+    margin-top: 8px;
+  }
+  .form-submit:hover { background: #ff5252; transform: translateY(-1px); }
+  .form-submit:active { transform: translateY(0); }
+
+  .form-note {
+    font-size: 12px;
+    color: var(--gray);
+    text-align: center;
+    margin-top: 16px;
+    font-style: italic;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #060e1c;
+    border-top: 1px solid var(--border);
+    padding: 40px 20px;
+    text-align: center;
+  }
+
+  .footer-logo {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--cyan);
+    letter-spacing: 4px;
+    margin-bottom: 8px;
+  }
+
+  .footer-sub {
+    font-size: 12px;
+    color: var(--gray);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .footer-links { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; }
+  .footer-links a {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--gray);
+    text-decoration: none;
+    letter-spacing: 1px;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--cyan); }
+
+  .footer-copy {
+    margin-top: 24px;
+    font-size: 11px;
+    color: rgba(138,155,191,0.4);
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(6,14,28,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+  }
+
+  .nav-logo {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--cyan);
+    letter-spacing: 3px;
+  }
+
+  .nav-links { display: flex; gap: 28px; }
+  .nav-links a {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--gray);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--cyan); }
+
+  .nav-alert {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--red);
+    letter-spacing: 2px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .nav-alert::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--red);
+    border-radius: 50%;
+    animation: blink 1.2s ease-in-out infinite;
+  }
+
+  @media(max-width:600px) {
+    .nav-links { display: none; }
+    .nav-alert { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">S.A.F.R.</div>
+  <div class="nav-links">
+    <a href="#about">Le service</a>
+    <a href="#grades">Grades</a>
+    <a href="#recrutement">Recrutement</a>
+    <a href="#postuler">Postuler</a>
+  </div>
+  <div class="nav-alert">Recrutement ouvert</div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg">
+    <div class="radar-ring"></div>
+    <div class="radar-ring"></div>
+    <div class="radar-ring"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge">Recrutement actif — San Andreas</div>
+    <h1 class="hero-title">
+      <span class="safr">S.A.F.R.</span>
+      <span class="full">San Andreas First Responders</span>
+    </h1>
+    <div class="hero-divider"></div>
+    <p class="hero-sub">
+      Rejoignez le premier service médical d'urgence de San Andreas.
+      Aucune expérience préalable requise — nous formons nos propres talents.
+    </p>
+    <a class="hero-cta" href="#postuler">
+      ✚ Candidater maintenant
+    </a>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num">24/7</div>
+        <div class="stat-label">Couverture</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">5</div>
+        <div class="stat-label">Grades</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">0</div>
+        <div class="stat-label">Prérequis</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">RP</div>
+        <div class="stat-label">Immersif</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- À PROPOS -->
+<section class="about" id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-text">
+        <div class="section-label">// À propos</div>
+        <h2 class="section-title">Le <span>SAFR</span>,<br>c'est quoi ?</h2>
+        <p>
+          Le <strong>San Andreas First Responders</strong> est le service médical d'urgence officiel de l'État de San Andreas. Notre mission : intervenir sur chaque incident, soigner chaque citoyen, sans distinction.
+        </p>
+        <p>
+          Après une période d'inactivité, le SAFR reprend du service sous une <strong>nouvelle direction</strong>, avec une vision claire : ouvrir ses portes à tout le monde. Que tu arrives avec une formation médicale ou sans aucune expérience, tu as ta place ici.
+        </p>
+        <p>
+          Nous croyons que le <strong>sens du service prime sur les diplômes</strong>. Notre programme de formation interne te donnera tout ce dont tu as besoin pour exceller sur le terrain.
+        </p>
+      </div>
+      <div class="about-cards">
+        <div class="about-card">
+          <div class="card-icon">🚑</div>
+          <div>
+            <div class="card-title">Interventions terrain</div>
+            <div class="card-body">Accidents, fusillades, overdoses, accidents de la route — chaque appel compte et tu seras en première ligne.</div>
+          </div>
+        </div>
+        <div class="about-card">
+          <div class="card-icon">🏥</div>
+          <div>
+            <div class="card-title">Formation interne</div>
+            <div class="card-body">Programme complet du niveau EMT Basic jusqu'au grade de Paramédic, avec formateurs dédiés.</div>
+          </div>
+        </div>
+        <div class="about-card">
+          <div class="card-icon">🚁</div>
+          <div>
+            <div class="card-title">Unités spécialisées</div>
+            <div class="card-body">Hélicoptère médicalisé, unités tactiques, interventions en zone de conflit — pour les plus expérimentés.</div>
+          </div>
+        </div>
+        <div class="about-card">
+          <div class="card-icon">🤝</div>
+          <div>
+            <div class="card-title">Coordination inter-services</div>
+            <div class="card-body">Travail en étroite collaboration avec le LSPD, LSSD et LSFD pour des interventions optimales.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GRADES -->
+<section id="grades">
+  <div class="container">
+    <div class="section-label">// Hiérarchie</div>
+    <h2 class="section-title">Les <span>grades</span></h2>
+    <p class="section-desc">Chaque membre évolue selon son investissement et ses compétences. Un parcours clair, de la recrue au directeur.</p>
+    <div class="grades-grid">
+      <div class="grade-card tier1">
+        <div class="grade-icon">🩺</div>
+        <div class="grade-name">Stagiaire</div>
+        <div class="grade-desc">Premier grade. Formation en cours, encadré par un senior. Accès aux interventions simples.</div>
+      </div>
+      <div class="grade-card tier2">
+        <div class="grade-icon">🚑</div>
+        <div class="grade-name">EMT Basic</div>
+        <div class="grade-desc">Formation de base validée. Gestes de secours, radio, protocoles terrain maîtrisés.</div>
+      </div>
+      <div class="grade-card tier3">
+        <div class="grade-icon">💊</div>
+        <div class="grade-name">Infirmier</div>
+        <div class="grade-desc">Prise en charge avancée. Peut former les stagiaires. Accès aux véhicules spéciaux.</div>
+      </div>
+      <div class="grade-card tier4">
+        <div class="grade-icon">⚕️</div>
+        <div class="grade-name">Paramédic</div>
+        <div class="grade-desc">Grade senior. Interventions critiques, coordination multi-victimes, hélicoptère médicalisé.</div>
+      </div>
+      <div class="grade-card tier5">
+        <div class="grade-icon">🏆</div>
+        <div class="grade-name">Directeur</div>
+        <div class="grade-desc">Direction du service, recrutement, relations inter-services, gestion de la hiérarchie.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS RECRUTEMENT -->
+<section class="recruit" id="recrutement">
+  <div class="container">
+    <div class="section-label">// Comment ça marche</div>
+    <h2 class="section-title">Le <span>processus</span><br>de recrutement</h2>
+    <p class="section-desc">Simple et rapide. Quatre étapes pour rejoindre le meilleur service médical de San Andreas.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-title">Dépôt de dossier</div>
+        <div class="step-body">Remplis le formulaire ci-dessous avec tes informations IC et ta lettre de motivation.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-title">Entretien IC</div>
+        <div class="step-body">Un responsable du SAFR te contacte in-game pour un entretien roleplay d'une quinzaine de minutes.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-title">Formation</div>
+        <div class="step-body">Intégration au programme de formation interne avec un tuteur dédié. Durée selon ton niveau.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div class="step-title">Titularisation</div>
+        <div class="step-body">Validation des acquis, remise de l'uniforme et du badge. Bienvenue dans le SAFR !</div>
+      </div>
+    </div>
+
+    <!-- Conditions -->
+    <div style="margin-top: 60px;">
+      <div class="section-label">// Conditions</div>
+      <h2 class="section-title" style="margin-bottom:8px;">Ce qu'on <span>recherche</span></h2>
+      <p class="section-desc">Pas de prérequis strict — juste les bonnes valeurs.</p>
+      <div class="conditions-grid">
+        <div class="cond-block">
+          <div class="cond-block-title green">✅ Ce qu'on attend</div>
+          <ul class="cond-list">
+            <li><span class="icon">✔️</span> Sérieux et présence régulière sur le serveur</li>
+            <li><span class="icon">✔️</span> Envie de progresser et de s'investir</li>
+            <li><span class="icon">✔️</span> Respect du roleplay médical et des collègues</li>
+            <li><span class="icon">✔️</span> Capacité à garder son calme sous pression</li>
+            <li><span class="icon">✔️</span> Esprit d'équipe et bienveillance</li>
+            <li><span class="icon">✔️</span> Microphone et bonne communication radio</li>
+          </ul>
+        </div>
+        <div class="cond-block">
+          <div class="cond-block-title red">❌ Rédhibitoires</div>
+          <ul class="cond-list">
+            <li><span class="icon">🚫</span> Antécédents de comportement toxique ou de ban</li>
+            <li><span class="icon">🚫</span> RDM / PowerGaming non assumé</li>
+            <li><span class="icon">🚫</span> Manque de respect envers les autres joueurs</li>
+            <li><span class="icon">🚫</span> Presence purement passive ou absente</li>
+            <li><span class="icon">🚫</span> Dossier incomplet ou mensonge lors de l'entretien</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FORMULAIRE -->
+<section id="postuler">
+  <div class="container">
+    <div style="text-align:center; margin-bottom: 48px;">
+      <div class="section-label" style="justify-content:center; display:flex;">// Candidature</div>
+      <h2 class="section-title">Rejoindre le <span>SAFR</span></h2>
+      <p class="section-desc" style="margin: 0 auto;">Remplis ce formulaire pour déposer ta candidature. Un membre de la direction te contactera in-game sous 48h.</p>
+    </div>
+    <div class="form-wrap">
+      <div class="form-grid">
+        <div class="form-row">
+          <label class="form-label">Prénom IC</label>
+          <input class="form-input" type="text" placeholder="ex : Marcus">
+        </div>
+        <div class="form-row">
+          <label class="form-label">Nom IC</label>
+          <input class="form-input" type="text" placeholder="ex : Williams">
+        </div>
+      </div>
+      <div class="form-grid">
+        <div class="form-row">
+          <label class="form-label">Pseudo serveur</label>
+          <input class="form-input" type="text" placeholder="Ton pseudo en jeu">
+        </div>
+        <div class="form-row">
+          <label class="form-label">Discord</label>
+          <input class="form-input" type="text" placeholder="pseudo#0000">
+        </div>
+      </div>
+      <div class="form-row">
+        <label class="form-label">Expérience médicale IC</label>
+        <select class="form-select">
+          <option value="">Sélectionner...</option>
+          <option>Aucune expérience — débutant complet</option>
+          <option>Quelques notions de base</option>
+          <option>Ancien membre d'un service médical RP</option>
+          <option>Expérience confirmée (paramédic, médecin…)</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label class="form-label">Disponibilités</label>
+        <select class="form-select">
+          <option value="">Sélectionner...</option>
+          <option>Quelques heures par semaine</option>
+          <option>Plusieurs soirs par semaine</option>
+          <option>Quotidiennement</option>
+          <option>Week-ends principalement</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label class="form-label">Pourquoi rejoindre le SAFR ?</label>
+        <textarea class="form-textarea" placeholder="Parle-nous de ta motivation, de ce que tu veux apporter au service..."></textarea>
+      </div>
+      <div class="form-row">
+        <label class="form-label">Background IC (facultatif)</label>
+        <textarea class="form-textarea" style="min-height:90px;" placeholder="Décris brièvement qui est ton personnage..."></textarea>
+      </div>
+      <button class="form-submit" onclick="submitForm()">
+        ✚ Soumettre ma candidature
+      </button>
+      <p class="form-note">* Ce formulaire est à titre indicatif. Copiez-collez les réponses dans un message Discord ou Google Form selon les instructions de votre serveur.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">S.A.F.R.</div>
+  <div class="footer-sub">San Andreas First Responders</div>
+  <div class="footer-links">
+    <a href="#about">Le service</a>
+    <a href="#grades">Grades</a>
+    <a href="#recrutement">Recrutement</a>
+    <a href="#postuler">Postuler</a>
+  </div>
+  <div class="footer-copy">© San Andreas First Responders — Fivem Roleplay — Tous droits réservés</div>
+</footer>
+
+<script>
+  // Google Sites iframe auto-height
+  function sendHeight() {
+    const h = document.documentElement.scrollHeight;
+    window.parent.postMessage({ type: 'resize', height: h }, '*');
+  }
+  window.addEventListener('load', sendHeight);
+  window.addEventListener('resize', sendHeight);
+  new MutationObserver(sendHeight).observe(document.body, { childList: true, subtree: true });
+
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  // Discord Webhook
+  async function submitForm() {
+    const inputs = document.querySelectorAll('.form-input, .form-select, .form-textarea');
+    const btn = document.querySelector('.form-submit');
+
+    const prenomIC   = inputs[0].value.trim();
+    const nomIC      = inputs[1].value.trim();
+    const pseudo     = inputs[2].value.trim();
+    const discord    = inputs[3].value.trim();
+    const experience = inputs[4].value;
+    const dispo      = inputs[5].value;
+    const motivation = inputs[6].value.trim();
+    const background = inputs[7].value.trim();
+
+    if (!prenomIC || !nomIC || !pseudo || !discord || !experience || !dispo || !motivation) {
+      btn.textContent = '⚠ Remplis tous les champs obligatoires';
+      btn.style.background = '#e65100';
+      setTimeout(() => { btn.textContent = '✚ Soumettre ma candidature'; btn.style.background = ''; }, 3000);
+      return;
+    }
+
+    btn.textContent = '⏳ Envoi en cours...';
+    btn.disabled = true;
+
+    const webhookUrl = 'https://discord.com/api/webhooks/1500574273323143240/JM516eEatlYU4_jOW7NRq3zclS-1vd1IZTy7cG9oceyi6f81F8lohY7UNwHCWrNO1lRm';
+
+    const payload = {
+      username: 'SAFR — Recrutement',
+      embeds: [{
+        title: '🚑 Nouvelle candidature — San Andreas First Responders',
+        color: 0xe53935,
+        fields: [
+          { name: '👤 Identité IC', value: prenomIC + ' ' + nomIC, inline: true },
+          { name: '🎮 Pseudo serveur', value: pseudo, inline: true },
+          { name: '💬 Discord', value: discord, inline: true },
+          { name: '🏥 Expérience médicale', value: experience, inline: false },
+          { name: '🕐 Disponibilités', value: dispo, inline: true },
+          { name: '✍️ Motivation', value: motivation || 'Non renseigné', inline: false },
+          { name: '📖 Background IC', value: background || 'Non renseigné', inline: false },
+        ],
+        footer: { text: 'SAFR Recrutement • rapolis.github.io/SAFR' },
+        timestamp: new Date().toISOString()
+      }]
+    };
+
+    try {
+      const res = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (res.ok) {
+        btn.textContent = '✔ Candidature envoyée !';
+        btn.style.background = '#2e7d32';
+        inputs.forEach(i => i.value = '');
+      } else { throw new Error(); }
+    } catch {
+      btn.textContent = '❌ Erreur — réessaie';
+      btn.style.background = '#b71c1c';
+    }
+    btn.disabled = false;
+    setTimeout(() => { btn.textContent = '✚ Soumettre ma candidature'; btn.style.background = ''; }, 4000);
+  }
+
+  // Fade-in on scroll
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.about-card, .grade-card, .step, .cond-block').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    observer.observe(el);
+  });
+</script>
+
+</body>
+</html>
