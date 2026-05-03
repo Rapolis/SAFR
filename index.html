@@ -20,6 +20,11 @@
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
+  html, body {
+    height: 100%;
+    overflow: auto;
+  }
+
   body {
     background: var(--navy);
     color: var(--white);
@@ -867,6 +872,15 @@
 </footer>
 
 <script>
+  // Google Sites iframe auto-height
+  function sendHeight() {
+    const h = document.documentElement.scrollHeight;
+    window.parent.postMessage({ type: 'resize', height: h }, '*');
+  }
+  window.addEventListener('load', sendHeight);
+  window.addEventListener('resize', sendHeight);
+  new MutationObserver(sendHeight).observe(document.body, { childList: true, subtree: true });
+
   // Smooth scroll
   document.querySelectorAll('a[href^="#"]').forEach(a => {
     a.addEventListener('click', e => {
@@ -876,15 +890,68 @@
     });
   });
 
-  // Form submit feedback
-  function submitForm() {
+  // Discord Webhook
+  async function submitForm() {
+    const inputs = document.querySelectorAll('.form-input, .form-select, .form-textarea');
     const btn = document.querySelector('.form-submit');
-    btn.textContent = '✔ Candidature enregistrée !';
-    btn.style.background = '#2e7d32';
-    setTimeout(() => {
-      btn.textContent = '✚ Soumettre ma candidature';
-      btn.style.background = '';
-    }, 3000);
+
+    const prenomIC   = inputs[0].value.trim();
+    const nomIC      = inputs[1].value.trim();
+    const pseudo     = inputs[2].value.trim();
+    const discord    = inputs[3].value.trim();
+    const experience = inputs[4].value;
+    const dispo      = inputs[5].value;
+    const motivation = inputs[6].value.trim();
+    const background = inputs[7].value.trim();
+
+    if (!prenomIC || !nomIC || !pseudo || !discord || !experience || !dispo || !motivation) {
+      btn.textContent = '⚠ Remplis tous les champs obligatoires';
+      btn.style.background = '#e65100';
+      setTimeout(() => { btn.textContent = '✚ Soumettre ma candidature'; btn.style.background = ''; }, 3000);
+      return;
+    }
+
+    btn.textContent = '⏳ Envoi en cours...';
+    btn.disabled = true;
+
+    const webhookUrl = 'https://discord.com/api/webhooks/1500574273323143240/JM516eEatlYU4_jOW7NRq3zclS-1vd1IZTy7cG9oceyi6f81F8lohY7UNwHCWrNO1lRm';
+
+    const payload = {
+      username: 'SAFR — Recrutement',
+      embeds: [{
+        title: '🚑 Nouvelle candidature — San Andreas First Responders',
+        color: 0xe53935,
+        fields: [
+          { name: '👤 Identité IC', value: prenomIC + ' ' + nomIC, inline: true },
+          { name: '🎮 Pseudo serveur', value: pseudo, inline: true },
+          { name: '💬 Discord', value: discord, inline: true },
+          { name: '🏥 Expérience médicale', value: experience, inline: false },
+          { name: '🕐 Disponibilités', value: dispo, inline: true },
+          { name: '✍️ Motivation', value: motivation || 'Non renseigné', inline: false },
+          { name: '📖 Background IC', value: background || 'Non renseigné', inline: false },
+        ],
+        footer: { text: 'SAFR Recrutement • rapolis.github.io/SAFR' },
+        timestamp: new Date().toISOString()
+      }]
+    };
+
+    try {
+      const res = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (res.ok) {
+        btn.textContent = '✔ Candidature envoyée !';
+        btn.style.background = '#2e7d32';
+        inputs.forEach(i => i.value = '');
+      } else { throw new Error(); }
+    } catch {
+      btn.textContent = '❌ Erreur — réessaie';
+      btn.style.background = '#b71c1c';
+    }
+    btn.disabled = false;
+    setTimeout(() => { btn.textContent = '✚ Soumettre ma candidature'; btn.style.background = ''; }, 4000);
   }
 
   // Fade-in on scroll
